@@ -2,8 +2,6 @@
 
 A sleek, responsive website for the HeartzGens Minecraft server featuring a modern design with custom color scheme.
 
-![HeartzGens Website Preview](heartzgens.vercel.app)
-
 ## 📋 Overview
 
 This repository contains the source code for the HeartzGens Minecraft server website. The site is designed to showcase server features, provide server stats, and make it easy for players to join the community.
