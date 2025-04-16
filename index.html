@@ -10,6 +10,8 @@
             --secondary: #FF69B4;
             --dark: #222;
             --light: #f5f5f5;
+            --online: #4CAF50;
+            --offline: #F44336;
         }
         
         * {
@@ -92,6 +94,45 @@
             background-color: rgba(255,255,255,0.2);
         }
         
+        /* Server status widget */
+        .server-status-widget {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.6);
+            border-radius: 8px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .online {
+            background-color: var(--online);
+            box-shadow: 0 0 8px var(--online);
+        }
+        
+        .offline {
+            background-color: var(--offline);
+            box-shadow: 0 0 8px var(--offline);
+        }
+        
+        .status-text {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        .player-count {
+            font-weight: bold;
+        }
+        
         .hero {
             padding: 100px 0;
             text-align: center;
@@ -141,6 +182,117 @@
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(255,35,35,0.4);
+        }
+        
+        /* Live server monitor */
+        .live-server-monitor {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .monitor-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .refresh-button {
+            background: none;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .refresh-button:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .refresh-icon {
+            margin-right: 5px;
+        }
+        
+        .status-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .status-card {
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .status-card-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .status-card-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .player-list {
+            margin-top: 30px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .player-list-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .player-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        
+        .player-item {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+        
+        .player-avatar {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 4px;
         }
         
         .features {
@@ -232,22 +384,6 @@
             text-align: center;
         }
         
-        .social-links {
-            margin-bottom: 20px;
-        }
-        
-        .social-links a {
-            display: inline-block;
-            margin: 0 10px;
-            color: white;
-            font-size: 24px;
-            transition: color 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            color: var(--secondary);
-        }
-        
         .copyright {
             font-size: 14px;
             color: rgba(255,255,255,0.6);
@@ -270,6 +406,14 @@
             .hero h1 {
                 font-size: 36px;
             }
+            
+            .server-status-widget {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 20px;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -280,10 +424,16 @@
             <nav>
                 <ul>
                     <li><a href="#home">Home</a></li>
+                    <li><a href="#status">Status</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#join">Join</a></li>
                 </ul>
             </nav>
+        </div>
+        <div class="server-status-widget">
+            <div class="status-indicator online" id="status-dot"></div>
+            <div class="status-text" id="status-text">Online</div>
+            <div class="player-count" id="player-count">0/100 Players</div>
         </div>
     </header>
     
@@ -292,6 +442,45 @@
             <h1>Welcome to <span style="color: var(--primary);">Heartz</span><span style="color: var(--secondary);">Gens</span></h1>
             <p>Experience the ultimate Minecraft adventure on our premium generators server. Build, battle, and become the ultimate champion!</p>
             <a href="#join" class="btn">Join Now</a>
+        </div>
+    </section>
+    
+    <!-- New section for server status -->
+    <section id="status" class="status-section">
+        <div class="container">
+            <h2 class="section-title">Server <span>Status</span></h2>
+            <div class="live-server-monitor">
+                <div class="monitor-header">
+                    <div class="monitor-title">Live Server Monitor</div>
+                    <button class="refresh-button" id="refresh-status">
+                        <span class="refresh-icon">↻</span> Refresh
+                    </button>
+                </div>
+                <div class="status-details">
+                    <div class="status-card">
+                        <div class="status-card-title">STATUS</div>
+                        <div class="status-card-value" id="detailed-status">CHECKING...</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-card-title">PLAYERS</div>
+                        <div class="status-card-value" id="detailed-players">0/100</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-card-title">VERSION</div>
+                        <div class="status-card-value">1.20.5</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-card-title">UPTIME</div>
+                        <div class="status-card-value" id="uptime">Checking...</div>
+                    </div>
+                </div>
+                <div class="player-list">
+                    <div class="player-list-title">Online Players</div>
+                    <div class="player-grid" id="player-list">
+                        <!-- Player list will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     
@@ -314,6 +503,7 @@
                     <h3>Active Community</h3>
                     <p>Join our friendly community of players and make new friends.</p>
                 </div>
+            </div>
         </div>
     </section>
     
@@ -346,11 +536,14 @@
     </section>
     
     <footer>
-        </div>
+        <div class="container">
             <div class="copyright">
                 &copy; 2025 HeartzGens Minecraft Server. All rights reserved.
             </div>
         </div>
     </footer>
+
+    <!-- Include the server status script -->
+    <script src="server-status.js"></script>
 </body>
 </html>
